@@ -1,0 +1,30 @@
+{% extends "qhome/base.html" %}
+
+{% block content %}
+	<table class="table table-hover">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th>Court ID</th>
+	      <th>Umpire</th>
+	      <th>Match Duration</th>
+	      <th>Score</th>
+	      <th>Winners</th>
+	      <th>Losers</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for record in match_records %}
+	  		<tr>
+		      <td>{{ record.court_num }}</td>
+		      <td>{{ record.umpire }}</td>
+		      <td>{{ record.match_duration }}</td>
+		      <td>{{ record.score }}</td>
+		      <td>{{ record.winners }}</td>
+		      <td>{{ record.losers }}</td>
+		    </tr>
+	  	{% endfor %}
+
+	    </tr>
+	  </tbody>
+	</table>
+{% endblock content %}
