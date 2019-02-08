@@ -1,0 +1,29 @@
+{% extends "qhome/base.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<a class="btn btn-outline-primary btn-sm mb-1" href="{% url 'court-create' %}">Add Court</a>
+	<table class="table table-hover">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th>Court Type</th>
+	      <th>Free</th>
+	      <th><th> 
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for record in queue_courts %}
+	  		<tr>
+		      <td>{{ record.court_type}}</td>
+		      <td>{{ record.isFree }}</td>
+		      <td> <a class="btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'court-delete' record.id %}">Delete</a></td>
+		    </tr>
+	  	{% endfor %}
+
+	    </tr>
+	  </tbody>
+	</table>
+</div>
+<a class="btn btn-outline-primary btn-sm mb-1" href="#">Make Badminton Queue</a>
+{% endblock content %}

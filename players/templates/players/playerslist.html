@@ -1,0 +1,32 @@
+{% extends "qhome/base.html" %}
+
+{% block content %}
+	<a class="btn btn-outline-primary btn-sm mb-1" href="{% url 'players-create' %}">Add Player</a>
+	<table class="table table-hover">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th>Player</th>
+	      <th>Player Level</th>
+	      <th>Total Games</th>
+	      <th>Total Wins</th>
+	      <th></th>
+	      <th></th> 
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for player in player_list %}
+	  		<tr>
+		      <td>{{ player.name }}</td>
+		      <td>{{ player.level }}</td>
+		      <td>{{ player.total_games }}</td>
+		      <td>{{ player.total_wins }}</td>
+		      <td> <a class="btn btn-secondary btn-sm mt-1 mb-1" href = "{% url 'players-update' player.id %}">Update</a></td>
+		      <td> <a class="btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'players-delete' player.id %}">Delete</a></td>
+		    </tr>
+	  	{% endfor %}
+
+	    </tr>
+	  </tbody>
+	</table>
+
+{% endblock content %}
