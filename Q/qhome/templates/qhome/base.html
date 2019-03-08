@@ -34,8 +34,12 @@
 	        <div class="navbar-nav mr-auto">
 	          <a class="nav-item nav-link" href="{% url 'q-home' %}">Home</a>
 	          <a class="nav-item nav-link" href="{% url 'players-list' %}">Players</a>
-	          <a class="nav-item nav-link" href="{% url 'queue-records' %}">Records</a>
-	          <a class="nav-item nav-link" href="#">Queue</a>
+              <a class="nav-item nav-link" href="{% url 'venues-list' %}">Venues</a>
+              <a class="nav-item nav-link" href="{% url 'courts-list' %}">Courts</a>
+              <a class="nav-item nav-link" href="{% url 'queues-list' %}">Queues</a>
+              <a class="nav-item nav-link" href="{% url 'records-list' %}">Records</a>
+
+
 	        </div>
 	        <!-- Navbar Right Side -->
 	        <div class="navbar-nav">
@@ -50,9 +54,9 @@
 
 	<main role="main" class="container">
 		<div class="row">
-			<div class="col-md-8">
+			<!-- <div class="col-md-8"> -->
 				{% block content %}{% endblock %}
-			</div>
+			<!-- </div> -->
 		</div>
 	</main>
 

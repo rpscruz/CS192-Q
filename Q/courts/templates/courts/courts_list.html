@@ -1,0 +1,33 @@
+{% extends "qhome/base.html" %}
+
+{% block content %}
+   
+    <div class="table-responsive text-nowrap table-sm">
+      <table class="table table-hover">
+        <thead class="thead-bg-light">
+          <tr>
+            <th> <a class="btn btn-link" href="{% url 'court-create' %}">+</a> </th>
+            <th>Venue Name</th>
+            <th>Court Name</th>
+            <th></th>
+            <th></th> 
+          </tr>
+        </thead>
+        <tbody>
+          {% for court in courts_list %}
+              <tr>
+                <td></td>
+                <td>{{ court.venue.venue_name }}</td>
+                <td>{{ court.court_name }}</td>
+                <td> <a class="btn btn-secondary btn-sm mt-1 mb-1" href = "{% url 'court-update' court.court_id %}">Update</a></td>
+                <td> <a class="btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'court-delete' court.court_id %}">Delete</a></td>
+              </tr>
+          {% endfor %}
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+
+{% endblock content %}

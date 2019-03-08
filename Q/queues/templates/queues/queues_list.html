@@ -1,0 +1,48 @@
+{% extends "qhome/base.html" %}
+
+{% block content %}
+    <div class="table-responsive w-100">
+      <table class="table table-hover table-sm text-centered">
+        <thead class="thead bg-light">
+          <tr>
+            <th> <a class="btn btn-link" href="{% url 'match-create' %}">+</a> </th>
+            <th>Venue Name</th>
+            <th>Players</th>
+            <th>Court</th>
+            <th>Interval</th>
+
+            <th>Time remaining</th>
+            <th>Date</th>
+            <th></th>
+            <th></th> 
+          </tr>
+        </thead>
+        <tbody>
+          {% for queue in queues_list %}
+            {% if queue.remaining_time.total_seconds > 0 %} 
+              <tr>
+                <td></td>
+                <td>{{ queue.type.type }}</td>
+                <td>{{ queue.team1_p1.first_name}} {{queue.team2_p1.first_name }}</td>
+                <td>{{ queue.court.venue }} {{ queue.court.court_name }}</td>
+                <td> {{ queue.duration }} </td>
+                <td> {{ queue.remaining_time.total_seconds }}</td>
+                <td>{{ queue.creation_date }}</td>
+                <td> <a class="btn btn-secondary btn-sm mt-1 mb-1" href = "{% url 'match-update' queue.m_id %}">Update</a></td>
+                <td> <a class="btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'match-delete' queue.m_id %}">Delete</a></td>
+              </tr>
+            {% endif %}
+
+                
+
+
+                
+              </tr>
+          {% endfor %}
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+{% endblock content %}
