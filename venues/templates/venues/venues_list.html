@@ -1,0 +1,26 @@
+{% extends "qhome/base.html" %}
+
+{% block content %}
+    <a class="btn btn-outline-primary btn-sm mb-1" href="{% url 'venues-create' %}">Add Venue</a>
+    <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>Venue name</th>
+          <th></th>
+          <th></th> 
+        </tr>
+      </thead>
+      <tbody>
+        {% for venue in venues_list %}
+            <tr>
+              <td>{{ venue.venue_name }}</td>
+              <td> <a class="btn btn-secondary btn-sm mt-1 mb-1" href = "{% url 'venues-update' venue.venue_id %}">Update</a></td>
+              <td> <a class="btn btn-danger btn-sm mt-1 mb-1" href = "{% url 'venues-delete' venue.venue_id %}">Delete</a></td>
+            </tr>
+        {% endfor %}
+
+        </tr>
+      </tbody>
+    </table>
+
+{% endblock content %}
