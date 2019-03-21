@@ -16,6 +16,7 @@ class Player(models.Model):
     class Meta:
         managed = False
         db_table = 'player'
+        unique_together = ['last_name', 'first_name']
 
     def __str__(self):
         return self.first_name
