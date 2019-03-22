@@ -8,11 +8,25 @@ Cruz, Rianna Patricia
 This is a course requirement for CS 192 Software Engineering II under the supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer Science, College of Engineering, University of the Philippines, Diliman for the AY 2015-2016
 
 ## HISTORY
+
+###### Sprint 4
+Updates by Cruz (Mar 22):
+- Disallows player deletion when player is in Queue
+- Disallows the creation of duplicate players (ie. players with identical names)
+
+Further validity checking
+
+###### Sprint 3
+Updates by Cruz (Mar 8):
+Queues move to Records when they are completed. 
+
+To add: Validity checking: Disallow deletion of player case when player is in a match
+
 ###### Sprint 2
 Updates by Cruz (Feb 22):
 Queue table, Queue table CRUD functionality
 
-To add: SImulate 'movement' of Quueue or matches in queue.
+To add: Simulate 'movement' of Quueue or matches in queue.
 
 
 ###### Sprint 1
