@@ -26,8 +26,7 @@ class MatchUpdateView(UpdateView):
     
     success_url = '/queues/'
 
-
 class MatchDeleteView(DeleteView):
     model = Match #originally match
     success_url = '/queues/'
-
+    

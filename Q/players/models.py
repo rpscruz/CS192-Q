@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
+
 # Create your models here.
 
 class Player(models.Model):
@@ -23,3 +24,10 @@ class Player(models.Model):
 
     def get_absolute_url(self):
         return reverse('players-list')
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            return reverse('players-list')
+

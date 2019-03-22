@@ -5,6 +5,8 @@ from django.utils import timezone
 
 import datetime
 
+from django.db.models.deletion import PROTECT
+
 
 class Player(models.Model):
     player_id = models.AutoField(primary_key=True)
@@ -69,12 +71,12 @@ class Match(models.Model):
     type = models.ForeignKey('MatchType', models.DO_NOTHING, db_column='type', blank=False, null=True)
     
     # first players of each team
-    team1_p1 = models.ForeignKey('Player', models.DO_NOTHING, related_name='team1_p1', db_column='team1_p1', null=True)
-    team2_p1 = models.ForeignKey('Player', models.DO_NOTHING, related_name='team2_p1', db_column='team2_p1', null=True)
+    team1_p1 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team1_p1', db_column='team1_p1', null=True)
+    team2_p1 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team2_p1', db_column='team2_p1', null=True)
     
     # second players of each team
-    team1_p2 = models.ForeignKey('Player', models.DO_NOTHING, related_name='team1_p2', db_column='team1_p2', null=True)
-    team2_p2 = models.ForeignKey('Player', models.DO_NOTHING, related_name='team2_p2', db_column='team2_p2', null=True)
+    team1_p2 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team1_p2', db_column='team1_p2', null=True)
+    team2_p2 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team2_p2', db_column='team2_p2', null=True)
  
     court = models.ForeignKey('Court', models.DO_NOTHING)
     creation_date = models.DateTimeField(default=timezone.now(), blank=False)
@@ -87,7 +89,7 @@ class Match(models.Model):
     def get_absolute_url(self):
         return reverse('queues_list')
 
-    
+
 # https://zxq9.com/archives/616
 class Queue(models.Model):
     m_id = models.SmallIntegerField(blank=True,  primary_key=True)
@@ -95,12 +97,12 @@ class Queue(models.Model):
     type = models.ForeignKey('MatchType', models.DO_NOTHING, db_column='type', blank=False, null=True)
 
     # first players of each team
-    team1_p1 = models.ForeignKey('Player', models.DO_NOTHING, related_name='q_team1_p1', db_column='team1_p1', null=True)
-    team2_p1 = models.ForeignKey('Player', models.DO_NOTHING, related_name='q_team2_p1', db_column='team2_p1', null=True)
+    team1_p1 = models.ForeignKey('Player', related_name='q_team1_p1', db_column='team1_p1', null=True, on_delete=models.DO_NOTHING)
+    team2_p1 = models.ForeignKey('Player', related_name='q_team2_p1', db_column='team2_p1', null=True, on_delete=models.DO_NOTHING)
     
     # second players of each team
-    team1_p2 = models.ForeignKey('Player', models.DO_NOTHING, related_name='q_team1_p2', db_column='team1_p2', null=True)
-    team2_p2 = models.ForeignKey('Player', models.DO_NOTHING, related_name='q_team2_p2', db_column='team2_p2', null=True)
+    team1_p2 = models.ForeignKey('Player', related_name='q_team1_p2', db_column='team1_p2', null=True, on_delete=models.DO_NOTHING)
+    team2_p2 = models.ForeignKey('Player', related_name='q_team2_p2', db_column='team2_p2', null=True, on_delete=models.DO_NOTHING)
     court = models.ForeignKey('Court', models.DO_NOTHING)
     creation_date = models.DateTimeField(default=timezone.now(), blank=False)
     duration = models.DurationField(null=False, blank=False, default='01:00:00')  # This field type is a guess.
@@ -121,9 +123,6 @@ class Queue(models.Model):
         total_seconds_x = int(self.duration.total_seconds())
         hours = int(total_seconds_x / 3600)
         minutes = int((total_seconds_x % 3600) / 60)
-
-
-
 
         # return self.duration
         return self.duration
