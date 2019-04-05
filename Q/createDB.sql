@@ -10,6 +10,9 @@ drop table if exists Court cascade;
 drop sequence if exists Player_seq cascade;
 drop table if exists Player cascade;
 
+drop sequence if exists ActivePlayer_seq cascade;
+drop table if exists Player cascade;
+
 drop sequence if exists Venue_seq cascade;
 drop table if exists Venue cascade;
 
@@ -44,6 +47,16 @@ create table Player(
     creation_date timestamp not null default current_timestamp
 );
 
+create sequence ActivePlayer_seq;
+create table ActivePlayer(
+    player_id smallint not null default nextval('Player_seq') primary key,
+    last_name varchar,
+    first_name varchar,
+    player_level smallint,
+    total_games smallint,
+    total_win smallint,
+    creation_date timestamp not null default current_timestamp
+);
 
 create table Match_Type(
     mt_id smallint not null default 0 primary key,
