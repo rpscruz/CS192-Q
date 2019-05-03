@@ -1,0 +1,39 @@
+{% extends "queues/base.html" %}
+
+{% block extendedNavbar %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab active">
+                <a href="{% url 'queue-list' %}">List</a>
+            </li>
+            <li class="tab">
+                <a href="{% url 'queue-current' %}">Current</a>
+            </li>
+        </ul>
+    </div>
+{% endblock extendedNavbar %}
+
+{% block content %}
+    <div class="container">
+            <div class="row valign-wrapper">
+                <div class="col s6 offset-s3 valign">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title center-align">Queue Details</span>
+                            <div class="center-align top-margin">
+                                <p class="card-text">
+                                    The following players participated in this queue:
+                                    <ul>
+                                        {% for player in players %}
+                                            <li>{{ player.first_name }} {{ player.last_name }}</li>
+                                        {% endfor%}
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock content %}

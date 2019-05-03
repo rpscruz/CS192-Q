@@ -1,130 +1,109 @@
 from django.db import models
-from django.urls import reverse
-from django.utils.timezone import now
-from django.utils import timezone
-
-import datetime
-
-from django.db.models.deletion import PROTECT
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 
 
 class Player(models.Model):
-    player_id = models.AutoField(primary_key=True)
-    last_name = models.CharField(max_length=100, blank=False, null=True)
-    first_name = models.CharField(max_length=100, blank=False, null=True)
-    player_level = models.SmallIntegerField(blank=False, null=True)
-    total_games = models.SmallIntegerField(default=0, null=True)
-    total_win = models.SmallIntegerField(default=0, null=True)
-    creation_date = models.DateTimeField(default=now, blank=True)
+	player_id = models.AutoField(primary_key=True)
+	last_name = models.CharField(max_length=64, blank=False, null=True, verbose_name="Last Name")
+	first_name = models.CharField(max_length=64, blank=False, null=True, verbose_name="First Name")
+	player_level = models.PositiveSmallIntegerField(blank=False, default=0, null=True, verbose_name="Level")
+	total_games = models.PositiveSmallIntegerField(blank=False, default=0, null=True, verbose_name="Game Count")
+	total_wins = models.PositiveSmallIntegerField(blank=False, default=0, null=True, verbose_name="Total Wins")
+	inQueue = models.BooleanField(blank=False, default=False, verbose_name="Currently in Queue")
+	inMatch = models.BooleanField(blank=False, default=False, verbose_name="Currently in Match")
 
-    class Meta:
-        managed = False
-        db_table = 'player'
+	def __str__(self):
+		return self.first_name+' '+self.last_name
+	
+	class Meta:
+		db_table = "player"
+		unique_together=(
+			('first_name', 'last_name'),
+		)
 
-    def __str__(self):
-        return self.first_name+' '+self.last_name
+class Queue(models.Model):
+	MATCHTYPE_CHOICES = (
+		('S', 'Singles'),
+		('D', 'Doubles'),
+	)
+	queue_id = models.AutoField(primary_key=True)
+	created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name="Date Created")
+	match_type = models.CharField(max_length=1, choices=MATCHTYPE_CHOICES, default='S', blank=False, verbose_name="Match Type")
+	court = models.PositiveSmallIntegerField(default=1, blank=False, validators=[MinValueValidator(1)], verbose_name="Number of Courts")
+	players = models.ManyToManyField(Player, related_name='queues', verbose_name="Players in Queue")
+	onGoing = models.BooleanField(blank=False, default=True, verbose_name="Queue in Progress")
 
-    def get_absolute_url(self):
-        return reverse('players-list')
+	def __str__(self):
+		formatedDate = self.created.strftime("%B %d, %Y %I:%M %p")
+		return formatedDate
+	
+	def endQueue(self):
+		qPlayers = self.players.all()
+		for player in qPlayers:
+			player.inQueue = False
+			player.inMatch = False
+			player.save()
+	
+	def clean(self):
+		#______Handle endQueue_______
+		if not self.onGoing:
+			if self.match_set.filter(onGoing=True, endDT=None).exists():
+				raise ValidationError('Matches are still on going.')
 
-class Venue(models.Model):
-    venue_id = models.AutoField(primary_key=True)
-    venue_name = models.CharField(max_length=100, blank=False, null=True)
-    creation_date = models.DateTimeField(default=now, blank=True)
+		#_______Handle change courts____________
+		match = self.match_set.filter(onGoing=True)
+		if self.court < match.count():
+			raise ValidationError('Matches are ongoing in all courts.')
 
-    def __str__(self):
-        return self.venue_name
+	def save(self, *args, **kwargs):
+		try:
+			temp = Queue.objects.get(onGoing=True)
+			if self != temp:
+				temp.onGoing = False
+				temp.save()
+			
+		except Queue.DoesNotExist:
+			pass
+		super().save(*args,**kwargs)
 
-    class Meta:
-        managed = False
-        db_table = 'venue'
-
-class Court(models.Model):
-    court_id = models.AutoField(primary_key=True)
-    court_name = models.CharField(max_length=100, blank=False, null=True)
-    venue = models.ForeignKey('Venue', models.DO_NOTHING)
-    creation_date = models.DateTimeField(default=now, blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'court'
-
-    def __str__(self):
-        return str(self.venue)+' '+str(self.court_name)
-
-    def get_absolute_url(self):
-        return reverse('court-list')
-
-class MatchType(models.Model):
-    mt_id = models.SmallIntegerField(primary_key=True)
-    type = models.CharField(max_length=7, blank=False, null=True)
-
-    def __str__(self):
-        return self.type
-
-    class Meta:
-        managed = False
-        db_table = 'match_type'
 
 class Match(models.Model):
-    m_id = models.AutoField(primary_key=True)
-    type = models.ForeignKey('MatchType', models.DO_NOTHING, db_column='type', blank=False, null=True)
-    
-    # first players of each team
-    team1_p1 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team1_p1', db_column='team1_p1', null=True)
-    team2_p1 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team2_p1', db_column='team2_p1', null=True)
-    
-    # second players of each team
-    team1_p2 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team1_p2', db_column='team1_p2', null=True)
-    team2_p2 = models.ForeignKey('Player', on_delete=PROTECT, related_name='team2_p2', db_column='team2_p2', null=True)
- 
-    court = models.ForeignKey('Court', models.DO_NOTHING)
-    creation_date = models.DateTimeField(default=timezone.now(), blank=False)
-    duration = models.DurationField(null=False, blank=False, default='01:00:00')  # This field type is a guess.
+	match_id = models.AutoField(primary_key=True)
+	queuedAt = models.ForeignKey(Queue, on_delete=models.CASCADE, verbose_name="Queued at")
+	startDT = models.DateTimeField(auto_now=False, auto_now_add=False, default=None, blank=True, null=True, verbose_name="Start Time")
+	onGoing = models.BooleanField(blank=False, default=False, verbose_name="Match in Progress")
+	endDT = models.DateTimeField(auto_now=False, auto_now_add=False, default=None, blank=True, null=True, verbose_name="End Time")
+	players = models.ManyToManyField(Player, verbose_name="Players in Match")
+	umpire = models.CharField(max_length=64, blank=False, default=None, null=True, verbose_name="Umpire")
+	court_num = models.PositiveSmallIntegerField(default=1, null=True, validators=[MinValueValidator(1)], verbose_name="Court ID")
 
-    class Meta:
-        managed = False
-        db_table = 'match'
-
-    def get_absolute_url(self):
-        return reverse('queues_list')
+	def getWinner(self):
+		try:
+			return self.winner.winner_id
+		except ObjectDoesNotExist:
+			print("Winner does not exist")
 
 
-# https://zxq9.com/archives/616
-class Queue(models.Model):
-    m_id = models.SmallIntegerField(blank=True,  primary_key=True)
-
-    type = models.ForeignKey('MatchType', models.DO_NOTHING, db_column='type', blank=False, null=True)
-
-    # first players of each team
-    team1_p1 = models.ForeignKey('Player', related_name='q_team1_p1', db_column='team1_p1', null=True, on_delete=models.DO_NOTHING)
-    team2_p1 = models.ForeignKey('Player', related_name='q_team2_p1', db_column='team2_p1', null=True, on_delete=models.DO_NOTHING)
-    
-    # second players of each team
-    team1_p2 = models.ForeignKey('Player', related_name='q_team1_p2', db_column='team1_p2', null=True, on_delete=models.DO_NOTHING)
-    team2_p2 = models.ForeignKey('Player', related_name='q_team2_p2', db_column='team2_p2', null=True, on_delete=models.DO_NOTHING)
-    court = models.ForeignKey('Court', models.DO_NOTHING)
-    creation_date = models.DateTimeField(default=timezone.now(), blank=False)
-    duration = models.DurationField(null=False, blank=False, default='01:00:00')  # This field type is a guess.
-
-    class Meta:
-        managed = False  # Created from a view. Don't remove.
-        db_table = 'queue'
-
-    def get_absolute_url(self):
-        return reverse('queues_list')
 
 
-    @property    
-    def remaining_time(self):
 
-        diff = ( datetime.datetime.now() - self.creation_date )
-        self.duration = self.duration - diff
-        total_seconds_x = int(self.duration.total_seconds())
-        hours = int(total_seconds_x / 3600)
-        minutes = int((total_seconds_x % 3600) / 60)
 
-        # return self.duration
-        return self.duration
+class Winner(models.Model):
+	winner_id = models.AutoField(primary_key=True)
+	match = models.OneToOneField(Match, on_delete=models.CASCADE, blank=False)
+	players = models.ManyToManyField(Player)
+
+	
+
+
+
+
+		
+		
+
+
 
 

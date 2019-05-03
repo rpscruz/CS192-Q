@@ -1,0 +1,27 @@
+{% extends "queues/base.html" %}
+
+{% block content %}
+    <div class="container">
+            <div class="row valign-wrapper top-padding">
+                <div class="col s6 offset-s3 valign">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title center-align">End Queue</span>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <p class="card-text">
+                                        Are you sure you want to end the Queue?
+                                </p>
+                                <div class="center-align"">
+                                        <a class="waves-effect waves-light btn-small" href="{% url 'queue-current'%}">Cancel</a>
+                                        <button class="waves-effect waves-light btn-small" type="submit">
+                                            End Queue
+                                        </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}

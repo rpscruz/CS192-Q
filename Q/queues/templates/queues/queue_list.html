@@ -1,0 +1,52 @@
+{% extends "queues/base.html" %}
+
+{% block extendedNavbar %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab active">
+                <a href="{% url 'queue-list' %}">List</a>
+            </li>
+            <li class="tab">
+                <a href="{% url 'queue-current' %}">current</a>
+            </li>
+        </ul>
+    </div>
+{% endblock extendedNavbar %}
+
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="center-align top-margin">
+                    
+                    <div class="col s12 m4 l4 xl4 push-m7 push-l7 push-xl7">
+                        {% if inProgress %}
+                            <h3>Queue in Progress</h3>
+                            <a class="waves-effect waves-light btn-small" href="{% url 'queue-current' %}">{{ currentQ.created|date:"l, d M Y, h:i A" }}</a>
+                        {% else %}
+                            <h3>No Queues Ongoing</h3>
+                            <a class="waves-effect waves-light btn-small" href="{% url 'queue-new' %}">Create New Queue</a>
+                        {% endif %}
+                    </div>
+                    <div class="col s12 m7 l7 xl7 pull-m4 pull-l4 pull-xl4">
+                        <ul class="collection with-header">
+                            <li class=collection-header>
+                                <h3>Queue History</h3>
+                            </li>
+                            {% for queue in queues %}
+                                <li class="collection-item">
+                                    <a href="{% url 'queue-view' queue.queue_id %}">{{ queue.created|date:"l, d M Y, h:i A" }}</a>
+                                </li>
+                            {% endfor %}                
+                        </ul>
+                    </div>
+                        
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock content %}

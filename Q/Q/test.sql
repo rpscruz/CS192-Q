@@ -1,1 +1,0 @@
-insert into Match(type, team1_p1, team2_p1, court_id, duration, creation_date) values (0, 2, 4, 7, '2 hour', '2019-03-04 14:42:03.594723');

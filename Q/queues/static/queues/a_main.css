@@ -1,0 +1,64 @@
+/* .container{
+    padding-top: 5%;
+} */
+@font-face { font-family: AganeB; src: url('fonts/Agane╠Ç 65 (Bold).ttf'); }
+@font-face { font-family: Polygon; src: url('fonts/Polygon-Regular.otf'); } 
+
+.nav-container{
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.row{
+    margin-top: 5px;
+}
+
+.nav-content{
+    margin-right: 5%;
+    margin-left: 5%;
+}
+.parg{
+    text-indent: 40px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.container{
+    padding-top: 20px;
+}
+
+.queue-containter{
+    padding-top: 35px;
+}
+
+.card-title{
+    font-family: AganeB;
+}
+.card{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.top-margin{
+    margin-top: 15px;
+}
+.teal-text{
+    color: teal;
+}
+.top-padding{
+    padding-top: 30px;
+}
+
+.welcomeTitle{
+    font-family: Polygon;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: AganeB;
+}

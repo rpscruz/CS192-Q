@@ -1,0 +1,94 @@
+{% extends "queues/base.html" %}
+
+{% block extendedNavbar %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab">
+                <a href="{% url 'queue-list' %}">List</a>
+            </li>
+            <li class="tab active">
+                <a href="{% url 'queue-current' %}">Current</a>
+            </li>
+        </ul>
+    </div>
+{% endblock extendedNavbar %}
+
+
+
+{% block content %}
+
+    {% if inProgress %}
+        <div class="section">
+            <div class="container">
+                <div class="row top-padding">
+
+                    <div class="col l6">
+                            <div class="center-align">
+                                <a class="waves-effect waves-light btn-small" href="{% url 'queue-currentEnd' currentQ.queue_id %}">End Queue</a>
+                                <h6><a class="waves-effect waves-light btn-small" href="{% url 'queue-editCourts' currentQ.queue_id %}">Number of courts: {{ currentQ.court }}</a></h6>
+                                <ul class="collection with-header">
+                                    <li class="collection-header"><b><a class="waves-effect waves-teal btn-flat btn-small" href="{% url 'queue-editPlayer' currentQ.queue_id %}">Players in Court</a></b></li>
+                                    {% for player in players %}
+                                        {% if player.inMatch %}
+                                            <li class="collection-item grey lighten-3">{{ player.first_name }} {{ player.last_name }}</li>
+                                        {% else %}
+                                        <li class="collection-item">{{ player.first_name }} {{ player.last_name }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>               
+        
+                    </div>
+                    <div class="col l6">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title center-align">Queue at {{ currentQ.created|date:"l, d M Y, h:i A" }}</span>
+                                <div class="card-text">
+                                    <table class="responsive-table">
+                                        <tbody>
+                                            {% for match in matches %}
+                                                <tr>
+                                                    <td>Court {{ match.court_num }}</td>
+                                                    <td>
+                                                        <ul>
+                                                            {% for player in match.players.all %}
+                                                                <li>{{ player.first_name }} {{player.last_name}}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </td> 
+                                                    {% if match.onGoing %}
+                                                        <td><a class="waves-effect waves-light btn-small disabled" href="{% url 'match-start' match.match_id %}">Start</a> {{ match.startDT|date:"l, d M Y, h:i A" }}</td>
+                                                        <td><a class="waves-effect waves-light btn-small" href="{% url 'match-end' match.getWinner %}">End</a></td>
+                                                    {% else %}
+                                                        <td><a class="waves-effect waves-light btn-small" href="{% url 'match-start' match.match_id %}">Start</a> {{ match.startDT|date:"l, d M Y, h:i A" }}</td>
+                                                        <td><a class="waves-effect waves-light btn-small disabled" href="{% url 'match-end' match.getWinner %}">End</a></td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row valign-wrapper top-padding">
+                <div class="col s6 offset-s3 valign">
+                    <div class="center-align">
+                        <p>
+                            No queues are on going. Do you wish to <a href="{% url 'queue-new' %}">start a queue</a>?
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif%}
+
+{% endblock content %}

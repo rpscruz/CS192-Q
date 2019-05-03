@@ -15,17 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+import queues
 
 urlpatterns = [
-    path('', include('qhome.urls')),
     path('admin/', admin.site.urls),
-    path('players/', include('players.urls')),
-    path('venues/', include('venues.urls')),
-    path('courts/', include('courts.urls')),
-    path('queues/', include('queues.urls')),
-    path('records/', include('records.urls')),
+    path('players/', include('queues.player_urls')),
+    path('queues/', include('queues.queue_urls')),
+    path('queues/match/', include('queues.match_urls')),
+    path('records/', include('queues.record_urls')),
+    path('', queues.views.HomePageView.as_view(), name='Q-home'),
 ]
-
-# urlpatterns += staticfiles_urlpatterns()

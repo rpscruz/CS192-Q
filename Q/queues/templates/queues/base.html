@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!--Import RobotoFont-->
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="{% static 'queues/a_main.css' %}">
+
+
+        <title>Q</title>
+        
+    </head>
+
+    <body>
+        <header class="site-header">
+            <div class="navbar-fixed">
+                <nav class="nav-extended grey darken-4">
+                    <div class="nav-wrapper">
+                        <div class="nav-container">
+                            <a href="{% url 'Q-home' %}" class="brand-logo"><img width="400" height="auto" src="{% static 'queues/images/logo_1.png' %}"></a>
+                            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                                <li><a href="{% url 'player-list' %}">Players</a></li>
+                                <li><a href="{% url 'queue-list' %}">Queues</a></li>
+                                <li><a href="{% url 'record-list' %}">Records</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% block extendedNavbar %} {% endblock %} 
+                </nav>
+            </div>       
+        </header>
+
+        <main>
+            {% block content %} {% endblock %}
+
+            <div class="container" />
+        </main>
+
+        <!-- jQuery first, then Popper.js, then Materialize JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/js/materialize.min.js" integrity="sha256-SrBfGi+Zp2LhAvy9M1bWOCXztRU9Ztztxmu5BcYPcPE=" crossorigin="anonymous"></script>
+        <script>
+        $(document).ready(function(){
+            // Initialize materialize data picker
+            $('.datepicker').datepicker({'format': 'yyyy-mm-dd'});
+            // $('#timepicker').pickatime({
+            //     autoclose: false,
+            //     twelvehour: true,
+            //     default: 'now'
+            // });
+            $('.modal').modal();
+            $('select').formSelect();
+        });
+        </script>
+        {% block javascript %}{% endblock %}
+
+    </body>
+
+</html>

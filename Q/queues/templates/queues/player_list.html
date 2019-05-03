@@ -1,0 +1,45 @@
+{% extends "queues/base.html" %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="center-align">
+            <h3>Players</h3>
+            <a class="waves-effect waves-light btn-small" href="{% url 'player-new' %}">Add Player</a>
+        </div>
+        
+        <table class="highlight responsive-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Player Level</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for player in player_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'player-view' player.player_id %}">{{ player.last_name }}, {{ player.first_name }}</a>
+                        </td>
+                        <td>{{ player.player_level }}</td>
+                        <td>
+                            <a href="{% url 'player-edit' player.player_id %}">Edit</a>
+                        </td>
+                        <td>
+                            {% if player.inQueue %}
+                                <span>Delete</span>
+                            {% else %}
+                                <a href="{% url 'player-delete' player.player_id %}">Delete</a>
+                            {% endif %}
+                            
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

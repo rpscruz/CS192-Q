@@ -1,0 +1,72 @@
+{% extends "queues/base.html" %}
+
+{% load static %}
+{% block content %}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col l6">
+                <img class="responsive-img" src="{% static 'queues\images\logo.png' %}">
+            </div>
+            <div class="col l5">
+                <!-- <div class="card"> -->
+                        <!-- <div class="card-content"> -->
+                            <div class="center-align">
+                                <h2 class="welcomeTitle">Welcome to Q</h2>
+                            </div>
+                            <p class="parg">
+                                Q is an online badminton queueing app. Given a set of players and a number of courts, a queue and corresponding matches can be generated.
+                            </p>
+                            <p class="parg">
+                                    It supports singles matches and doubles matches. Q keeps track of the players' statistics, and it also keeps a record of all matches played.
+                            </p>
+                            <p class="parg">
+                                Please take the time to read the general instructions below. <a href="#Notes">Most importantly, please read the notes on queues before creating a queue.</a>
+                            </p>
+                        <!-- </div> -->
+                    
+                <!-- </div> -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class= "col s12">
+                <div class="divider"></div>
+                <div class="section">
+                    <div class="center-align">
+                        <h3>Players</h3>
+                    </div>
+                    <p class="parg">In order to create a queue, the players to put in it must already exist. You can access the list of players on the right side of the navigation bar. To add a new player, simple click on the Player page's 'ADD PLAYER' button. It is just above the table of players. The player form asks for your name and your estimated level. The better the player, the higher your level should be. Upon creation, Q initializes the number of matches you've played in and the number of matches you've won to zero. The media below illustrates this process.</p>
+                    <img class="responsive-img" src="{% static 'queues\images\HowToPlayers1.gif' %}">
+                    <p class="parg">A player's name can be changed, and a player's level can be updated. One can also view a player's details. A player can also be deleted. To do these, go to the Player page. The link is on the right side of the navigation bar. To view a player's detail, simply click their name. A player can be updated and deleted using the table of player's or using the player's detail page. These processes are illustrated below.</p>
+                    <img class="responsive-img" src="{% static 'queues\images\HowToPlayer2.gif' %}">
+                </div>
+                <div class="top-padding" />
+                <div class="divider"></div>
+                <div class="section">
+                    <div class="center-align">
+                        <h3>Queues</h3>
+                    </div>
+                    <h4>Creating a Queue</h4>
+                    <p class="parg">To create a queue, go to the Queue page via link on the right side of the navigation bar. This link goes to a listing of all queues made. You may click the date of the queue in order to view its details. To start a queue, you may either go to the current tab, or click the 'CREATE NEW QUEUE' button on the right side of the list tab.</p>
+                    <p class="parg">When creating a queue, input the match types for all the matches the queue will generate, the number of courts, and the players involve. Please see the <a href="#Notes">notes sections</a> for some reminders when setting up the queue. Upon the creation of the queue, you will be redirected to the current tab of the Queue page. Should the queue you have created be successful, the current tab should display buttons for ending the queue and changing the courts, a table of players whose table header is a link to change court players, and a panel on the right side of the page for the matches generated. These are all illustrated below.</p>
+                    <img class="responsive-img" src="{% static 'queues\images\HowToQueue.gif' %}">
+                </div>
+                <div class="top-padding" />
+                <div class="divider" id="Notes"></div>
+                <div class="section">
+                    <div class="center-align"><h4>Notes on Queues</h4></div>
+                    <h5>On Players</h5>
+                    <p class="parg">Players cannot be deleted while they are in queue. Players can be added to a queue at any point. Players can be removed from a queue as long a they are not in an ongoing match.</p>
+                    <h5>On Courts</h5>
+                    <p class="parg">You may change the number of courts in a queue at any given time. However, should all current courts in the queue have an ongoing match, you will be unable to change the number of courts to less than the current number. You must have at least the same number of courts with no ongoing matches as the number of courts you wish to remove.</p>
+                    <h6>Queues for Singles</h6>
+                    <p class="parg">When setting the number of courts in the queue, make sure you have enough players in the queue. In general, <i class="teal-text">given N number of courts, make sure you have at least ((N * 2) + 2) players.</i> Any less will result into an error.</p>
+                    <h6>Queues for Doubles</h6>
+                    <p class="parg">When setting the number of courts in the queue, make sure you have enough players in the queue. In general, <i class="teal-text">given N number of courts, make sure you have at least ((N * 4) + 4) players.</i> Any less will result into an error.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
