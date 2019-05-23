@@ -55,7 +55,7 @@ def queuePlayer_handler(sender, instance, action, pk_set, **kwargs):
             count = instance.court
             
             while count > 0:
-                instance.match_set.create(court_num=count)
+                instance.match_set.create(user=instance.user, court_num=count)
                 count = count - 1
 
     elif action == "post_remove":
@@ -85,7 +85,7 @@ def queueHandler_postsave(sender, instance, created, **kwargs):
     queue_created = created    
     #________handles Change of Court Number_____
     if not created:
-        matches = instance.match_set.filter(endDT=None) #Matches that were already generated
+        matches = instance.match_set.filter(user=instance.user, endDT=None) #Matches that were already generated
         match_count = matches.count()   #Count of matches already generated
 
         #Need to add matches
@@ -93,7 +93,7 @@ def queueHandler_postsave(sender, instance, created, **kwargs):
             counter = instance.court - match_count  #get the number of matches to add
 
             while ( counter > 0 ):
-                instance.match_set.create(court_num=(instance.court + counter-1))
+                instance.match_set.create(user=instance.user, court_num=(instance.court + counter-1))
                 counter = counter - 1
         elif instance.court < match_count:
             matches = matches.filter(onGoing=False).order_by('-court_num')   #get the matches that haven't been started
@@ -104,7 +104,6 @@ def queueHandler_postsave(sender, instance, created, **kwargs):
                 players = match.players.all()
                 for player in players:
                     player.inMatch = False
-                    player.total_games -= 1
                     player.save()
                 match.delete()
                 counter = counter - 1
@@ -113,7 +112,7 @@ def queueHandler_postsave(sender, instance, created, **kwargs):
     if not instance.onGoing:
         print("Got in")
         instance.endQueue()
-        matches = instance.match_set.filter(onGoing=False, endDT=None)
+        matches = instance.match_set.filter(user=instance.user, onGoing=False, endDT=None)
         for match in matches:
             match.delete()
 
@@ -127,7 +126,7 @@ def matchHandler_postsave(sender, instance, created, **kwargs):
         # Get players from associated Queue that are not in a match already
         # Get IDs from said players and generate a list of random IDs from it
         # Add the players with the generated random IDs to match
-        players = instance.queuedAt.players.filter(inMatch=False)      
+        players = instance.queuedAt.players.filter(user=instance.user, inMatch=False)      
         playerIDs = players.values_list('player_id', flat=True)
         playerIDs = list(playerIDs)
         rand_ids = random.sample(playerIDs, 2)
@@ -141,7 +140,7 @@ def matchHandler_postsave(sender, instance, created, **kwargs):
             instance.players.add(player)
 
         #Create a winner instance to associate it to this match
-        Winner.objects.create(match=instance)
+        Winner.objects.create(user=instance.user, match=instance)
 
         instance.save()
     #Handles Start of Matches
@@ -154,7 +153,7 @@ def matchHandler_postsave(sender, instance, created, **kwargs):
     #____Handles End of matches____
     elif (instance.endDT != None):
         
-        instance.queuedAt.match_set.create(court_num=instance.court_num,)
+        instance.queuedAt.match_set.create(user=instance.user, court_num=instance.court_num,)
         players = instance.players.all()
 
         for player in players:
@@ -167,3 +166,6 @@ def matchHandler_postsave(sender, instance, created, **kwargs):
 
 
 
+
+# Automatic listing of a number of matches per court in a queue
+# 

@@ -24,4 +24,6 @@ urlpatterns = [
     path('queues/match/', include('queues.match_urls')),
     path('records/', include('queues.record_urls')),
     path('', queues.views.HomePageView.as_view(), name='Q-home'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('account/', include('queues.accounts_urls')),
 ]

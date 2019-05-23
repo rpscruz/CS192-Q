@@ -1,0 +1,44 @@
+{% extends "queues/base.html" %}
+{% load materializecss %}
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+
+{% block extendedNavbar %}
+    <div class="nav-content">
+        <ul class="tabs tabs-transparent">
+            <li class="tab">
+                <a href="{% url 'queue-list' %}">List</a>
+            </li>
+            <li class="tab active">
+                <a href="{% url 'queue-current' %}">Current</a>
+            </li>
+        </ul>
+    </div>
+{% endblock extendedNavbar %}
+
+{% block content %}
+    <div class="container">
+        <div class="row valig.n-wrapper top-padding">
+            <div class="col s6 offset-s3 valign">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title center-align">Match Data</span>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form|materializecss }}
+                            <div class="center-align">
+                                <button class="btn waves-effect waves-light center" type="submit" name="action">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

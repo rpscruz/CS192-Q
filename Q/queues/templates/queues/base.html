@@ -32,6 +32,11 @@
                                 <li><a href="{% url 'player-list' %}">Players</a></li>
                                 <li><a href="{% url 'queue-list' %}">Queues</a></li>
                                 <li><a href="{% url 'record-list' %}">Records</a></li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'logout' %}">Sign Out</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'login' %}">Sign In</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>

@@ -1,0 +1,27 @@
+{% extends "queues/base.html" %}
+{% load materializecss %}
+
+{% block content %}
+    <div class="container">
+        <div class="row valign-wrapper top-padding">
+            <div class="col s6 offset-s3 valign">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title center-align">Login</span>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form|materializecss }}
+                            <div class="center-align">
+                                <button class="btn waves-effect waves-light center" type="submit" name="action">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                                <p style="padding-top:10px">or <a href="{% url 'signup' %}">sign up</a>.</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

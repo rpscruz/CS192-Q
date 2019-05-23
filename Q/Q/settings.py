@@ -127,3 +127,5 @@ DATETIME_INPUT_FORMATS += ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M",]
 
 STATIC_URL = '/static/'
 
+LOGIN_REDIRECT_URL = 'Q-home'
+LOGOUT_REDIRECT_URL = 'Q-home'

@@ -12,13 +12,17 @@
                 <!-- <div class="card"> -->
                         <!-- <div class="card-content"> -->
                             <div class="center-align">
+                                {% if user.is_authenticated %}
+                                    <h2 class="welcomeTitle">Welcome to Q</h2>
+                                    <p><b>Hello {{ user.username }}!</b></p>
+                                {% else %}
                                 <h2 class="welcomeTitle">Welcome to Q</h2>
+                                <p>Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'signup' %}">sign up</a> to use Q.</p>
+                                {% endif %}
+                                
                             </div>
                             <p class="parg">
-                                Q is an online badminton queueing app. Given a set of players and a number of courts, a queue and corresponding matches can be generated.
-                            </p>
-                            <p class="parg">
-                                    It supports singles matches and doubles matches. Q keeps track of the players' statistics, and it also keeps a record of all matches played.
+                                Q is an online badminton queueing app. Given a set of players and a number of courts, a queue and corresponding matches can be generated. It supports singles matches and doubles matches. Q keeps track of the players' statistics, and it also keeps a record of all matches played.
                             </p>
                             <p class="parg">
                                 Please take the time to read the general instructions below. <a href="#Notes">Most importantly, please read the notes on queues before creating a queue.</a>

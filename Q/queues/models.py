@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
@@ -6,6 +7,7 @@ from django.core.validators import MinValueValidator
 
 
 class Player(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
 	player_id = models.AutoField(primary_key=True)
 	last_name = models.CharField(max_length=64, blank=False, null=True, verbose_name="Last Name")
 	first_name = models.CharField(max_length=64, blank=False, null=True, verbose_name="First Name")
@@ -30,6 +32,7 @@ class Queue(models.Model):
 		('D', 'Doubles'),
 	)
 	queue_id = models.AutoField(primary_key=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
 	created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name="Date Created")
 	match_type = models.CharField(max_length=1, choices=MATCHTYPE_CHOICES, default='S', blank=False, verbose_name="Match Type")
 	court = models.PositiveSmallIntegerField(default=1, blank=False, validators=[MinValueValidator(1)], verbose_name="Number of Courts")
@@ -71,6 +74,7 @@ class Queue(models.Model):
 
 
 class Match(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
 	match_id = models.AutoField(primary_key=True)
 	queuedAt = models.ForeignKey(Queue, on_delete=models.CASCADE, verbose_name="Queued at")
 	startDT = models.DateTimeField(auto_now=False, auto_now_add=False, default=None, blank=True, null=True, verbose_name="Start Time")
@@ -87,11 +91,8 @@ class Match(models.Model):
 			print("Winner does not exist")
 
 
-
-
-
-
 class Winner(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
 	winner_id = models.AutoField(primary_key=True)
 	match = models.OneToOneField(Match, on_delete=models.CASCADE, blank=False)
 	players = models.ManyToManyField(Player)

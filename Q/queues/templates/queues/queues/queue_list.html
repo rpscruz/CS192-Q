@@ -34,11 +34,18 @@
                             <li class=collection-header>
                                 <h3>Queue History</h3>
                             </li>
-                            {% for queue in queues %}
+                            {% if queues.exists %}
+                                {% for queue in queues %}
+                                    <li class="collection-item">
+                                        <a href="{% url 'queue-view' queue.queue_id %}">{{ queue.created|date:"l, d M Y, h:i A" }}</a>
+                                    </li>
+                                {% endfor %}  
+
+                            {% else %}
                                 <li class="collection-item">
-                                    <a href="{% url 'queue-view' queue.queue_id %}">{{ queue.created|date:"l, d M Y, h:i A" }}</a>
+                                    No Queues in History.
                                 </li>
-                            {% endfor %}                
+                            {% endif %}              
                         </ul>
                     </div>
                         
