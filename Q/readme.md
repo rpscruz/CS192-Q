@@ -1,7 +1,7 @@
 ## HISTORY
 
 
-###### Alpha test
+###### Beta test
 Updates by Ojeda (May 5):
 - added login functionality
 
